@@ -1,21 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background: #667eea;
+    background: #dde1ee;
     min-height: 100vh;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255,255,255,0.9);
-    z-index: -1;
 }
 
 h1 {
@@ -32,46 +26,96 @@ p {
     font-style: normal;
     font-size: 1.1em;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 ul {
     list-style-type: none;
-    padding: 0;
+    margin-top: 20px;
 }
 
 li {
-    margin: 15px 0;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
     transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+li:hover {
+    transform: translateX(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 li a {
     display: block;
-    color: #333;
     text-decoration: none;
-    font-size: 18px;
-    padding: 15px 20px;
+    padding: 20px 25px;
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    border: 1px solid #e0e0e0;
 }
 
-li a:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    transform: translateX(10px);
-    box-shadow: 0 5px 15px rgba(102,126,234,0.3);
-    border-color: transparent;
+li a strong {
+    font-size: 1.3em;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+li a:hover strong {
+    color: rgb(149, 138, 155);
+}
+
+.question-info {
+    display: flex;
+    gap: 20px;
+    font-size: 0.9em;
+    color: #666;
+    transition: color 0.3s ease;
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+.date, .votes {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 p:last-child {
+    background: white;
+    padding: 40px;
     text-align: center;
-    background: #fff3cd;
-    border-left-color: #ffc107;
-    color: #856404;
+    border-radius: 15px;
+    color: #666;
+    font-style: normal;
+    font-size: 1.1em;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+
+@media (max-width: 600px) {
+    body {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    li a {
+        padding: 15px 20px;
+    }
+    
+    li a strong {
+        font-size: 1.1em;
+    }
+    
+    .question-info {
+        flex-direction: column;
+        gap: 5px;
+        font-size: 0.85em;
+    }
 }

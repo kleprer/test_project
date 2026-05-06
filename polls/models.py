@@ -15,9 +15,17 @@ class Question(models.Model):
         ordering="pub_date",
         description="Published recently?",
     )
+    
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+    
+    def total_votes(self):
+        total = 0
+        for choice in self.choice_set.all():
+            total += choice.votes
+        return total
+    
     def __str__(self):
         return self.question_text
 
