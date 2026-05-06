@@ -1,12 +1,27 @@
-<form action="{% url 'polls:vote' question.id %}" method="post">
-{% csrf_token %}
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    {% endfor %}
-</fieldset>
-<input type="submit" value="Vote">
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}?v=2">
+
+<form action="{% url 'polls:vote' question.id %}" method="post" class="vote-form">
+    {% csrf_token %}
+    <fieldset class="vote-fieldset">
+        <legend><h1>{{ question.question_text }}</h1></legend>
+        {% if error_message %}<p class="error-message"><strong>{{ error_message }}</strong></p>{% endif %}
+        
+        {% if question.choice_set.all %}
+            {% for choice in question.choice_set.all %}
+                <div class="choice-item">
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Vote" class="vote-btn">
+        {% else %}
+            <p class="no-choices-message">Создатель опроса не добавил варианты голосов или опрос закончился</p>
+            <a href="{% url 'polls:index' %}" class="home-button">На главную</a>
+        {% endif %}
+    </fieldset>
 </form>
+
+{% if question.choice_set.all %}
+    <a href="{% url 'polls:index' %}" class="home-button">На главную</a>
+{% endif %}
