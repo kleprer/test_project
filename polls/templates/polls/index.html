@@ -1,6 +1,8 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}?v=2">
 
+<h1>Опросы</h1>
+<p>Добро пожаловать на главную страницу опросов.</p>
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
