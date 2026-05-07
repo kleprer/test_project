@@ -42,8 +42,11 @@ jobs:
       uses: actions/checkout@v3
     
     - name: deploy to pythonanywhere
-      uses: fjpossible/pythonanywhere-deploy-action@v1
-      with:
-        api-token: ${{ secrets.PYTHONANYWHERE_TOKEN }}
-        username: ${{ secrets.PYTHONANYWHERE_USERNAME }}
-        domain-name: "kleprer.pythonanywhere.com"
+      env:
+        API_TOKEN: ${{ secrets.PYTHONANYWHERE_TOKEN }}
+        USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+        DOMAIN: ${{ secrets.PYTHONANYWHERE_DOMAIN }}
+      run: |
+        curl -X POST \
+          "https://www.pythonanywhere.com/api/v0/user/$USERNAME/webapps/$DOMAIN/reload/" \
+          -H "Authorization: Token $API_TOKEN"
