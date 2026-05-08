@@ -10,7 +10,7 @@ DEBUG = True
 
 
 
-ALLOWED_HOSTS = ['kleprer.pythonanywhere.com', 'www.kleprer.pythonanywhere.com']
+ALLOWED_HOSTS = ['kleprer.pythonanywhere.com', 'www.kleprer.pythonanywhere.com', '127.0.0.1']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
