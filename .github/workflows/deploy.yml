@@ -50,3 +50,8 @@ jobs:
         curl -X POST \
           "https://www.pythonanywhere.com/api/v0/user/$USERNAME/webapps/$DOMAIN/reload/" \
           -H "Authorization: Token $API_TOKEN"
+                
+        curl -X POST \
+          "https://$USERNAME:$API_TOKEN@www.pythonanywhere.com/api/v0/user/$USERNAME/consoles/" \
+          -d "executable=/bin/bash" \
+          -d "arguments=-c 'cd ~/django-app && git pull && python3.11 manage.py migrate && python3.11 manage.py collectstatic --noinput'"
