@@ -22,10 +22,8 @@ class DetailView(generic.DetailView):
     template_name = "polls/detail.html"
     
     def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
         return Question.objects.filter(pub_date__lte=timezone.now())
+    
     
 class ResultsView(generic.DetailView):
     model = Question
@@ -44,7 +42,7 @@ def vote(request, question_id):
             "polls/detail.html",
             {
                 "question": question,
-                "error_message": "You didn't select a choice.",
+                "error_message": "Выбор не сделан",
             },
         )
     else:
