@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Question
+from .models import Choice, Question
 
 
 class QuestionModelTests(TestCase):
@@ -123,3 +123,25 @@ class QuestionDetailViewTests(TestCase):
         url = reverse("polls:detail", args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
+
+class ChoiceModelTests(TestCase):
+    def test_choice_creation(self):
+        question = create_question("test question", days=-1)
+        choice = Choice.objects.create(
+            question=question,
+            choice_text="test choice",
+            votes=0
+        )
+        self.assertEqual(choice.choice_text, "test choice")
+        self.assertEqual(choice.votes, 0)
+    
+    def test_choice_votes_increment(self):
+        question = create_question("test question", days=-1)
+        choice = Choice.objects.create(
+            question=question,
+            choice_text="test choice",
+            votes=5
+        )
+        choice.votes += 1
+        choice.save()
+        self.assertEqual(choice.votes, 6)
