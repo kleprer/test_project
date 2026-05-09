@@ -1,6 +1,6 @@
 import datetime
 
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
@@ -145,3 +145,56 @@ class ChoiceModelTests(TestCase):
         choice.votes += 1
         choice.save()
         self.assertEqual(choice.votes, 6)
+
+class VoteTests(TestCase):
+    def setUp(self):
+        self.question = create_question("test question", days=-1)
+        self.choice1 = Choice.objects.create(
+            question=self.question,
+            choice_text="choice 1",
+            votes=0
+        )
+        self.choice2 = Choice.objects.create(
+            question=self.question,
+            choice_text="choice 2",
+            votes=0
+        )
+        self.client = Client()
+    
+    def test_vote_with_valid_choice(self):
+        url = reverse("polls:vote", args=(self.question.id,))
+        response = self.client.post(url, {"choice": self.choice1.id})
+        
+        self.choice1.refresh_from_db()
+        self.assertEqual(self.choice1.votes, 1)
+        self.assertRedirects(response, reverse("polls:results", args=(self.question.id,)))
+    
+    def test_vote_with_invalid_choice(self):
+        url = reverse("polls:vote", args=(self.question.id,))
+        response = self.client.post(url, {"choice": 999})
+        
+        self.choice1.refresh_from_db()
+        self.assertEqual(self.choice1.votes, 0)
+        self.assertContains(response, "Выбор не сделан")
+    
+    def test_vote_without_choice(self):
+        url = reverse("polls:vote", args=(self.question.id,))
+        response = self.client.post(url, {})
+        
+        self.choice1.refresh_from_db()
+        self.assertEqual(self.choice1.votes, 0)
+        self.assertContains(response, "Выбор не сделан")
+    
+    def test_vote_on_future_question(self):
+        future_question = create_question("future question", days=5)
+        choice = Choice.objects.create(
+            question=future_question,
+            choice_text="choice",
+            votes=0
+        )
+        url = reverse("polls:vote", args=(future_question.id,))
+        response = self.client.post(url, {"choice": choice.id})
+        
+        choice.refresh_from_db()
+        self.assertEqual(choice.votes, 0)
+        self.assertContains(response, "Голосование еще не началось")
